@@ -7,14 +7,14 @@ import pickle
 TOP_K = 128
 
 # 读取训练集数据并显示长度
-df_train = pd.read_csv('D:/Datasets/CVUSA/splits/train-19zl.csv', header=None)
+df_train = pd.read_csv('/datasets/CVUSA/splits/train-19zl.csv', header=None)
 df_train = df_train.rename(columns={0: "sat", 1: "ground", 2: "ground_anno"})
 df_train["idx"] = df_train.sat.map(lambda x : int(x.split("/")[-1].split(".")[0]))
 train_sat_ids = df_train["idx"].values
 print("Length Train Ids:", len(train_sat_ids))
 
 # 读取所有位置数据并显示长度
-df_gps = pd.read_csv('D:/Datasets/CVUSA/split_locations/all.csv', header=None)
+df_gps = pd.read_csv('/datasets/CVUSA/all.csv', header=None)
 df_gps = df_gps.rename(columns={0: "sat_lat", 1: "sat_long", 2: "ground_lat", 3: "ground_long", 4: "i_dont_know"})
 gps_coords = {}
 gps_coords_list = []
@@ -42,6 +42,6 @@ for i, idx in enumerate(train_sat_ids):
     near_neighbors[idx] = train_sat_ids[ids_near_numpy[i]].tolist()
 print("Saving...")
 # 将近邻字典保存为Pickle文件
-with open("D:/Datasets/CVUSA/gps_dict.pkl", "wb") as f:
+with open("/home/hxh/CVCities/gps_dict.pkl", "wb") as f:
     pickle.dump(near_neighbors, f)
 

@@ -4,6 +4,7 @@ import numpy as np
 import torch.nn as nn
 from cvcities_base import helper
 from torchsummary import summary
+import os
 
 
 class VPRModel(nn.Module):  # 继承pytorch-lightning.LightningModule模块

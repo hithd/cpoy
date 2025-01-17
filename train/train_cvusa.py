@@ -29,9 +29,9 @@ class Configuration:
     backbone_arch = 'dinov2_vitb14'
     # backbone_arch = ''
     pretrained = True
-    # layers_to_freeze = 1
-    # layers_to_crop = []
-    layer1 = 11
+    layers_to_freeze = 1
+    layers_to_crop = []
+    layer1 = -1
     use_cls = True
     norm_descs = True
 
@@ -54,11 +54,9 @@ class Configuration:
     mixed_precision: bool = True
     seed = 1
     epochs: int = 40
-    batch_size: int = 16  # keep in mind real_batch_size = 2 * batch_size
+    batch_size: int = 24  # keep in mind real_batch_size = 2 * batch_size
     verbose: bool = True
-    gpu_ids: tuple = (0, 1)  # GPU ids for training
-
-    polar_trans = False
+    gpu_ids: tuple = (3,)  # GPU ids for training
 
     # Similarity Sampling
     custom_sampling: bool = True  # use custom sampling instead of random
@@ -66,11 +64,11 @@ class Configuration:
     sim_sample: bool = True  # use similarity sampling
     neighbour_select: int = 64  # max selection size from pool 64
     neighbour_range: int = 128  # pool size for selection 128
-    gps_dict_path: str = "D:/Datasets/CVUSA/gps_dict.pkl"  # path to pre-computed distances
+    gps_dict_path: str = "/home/hxh/CVCities/embedding_dict.pkl"  # path to pre-computed distances
 
     # Eval
-    batch_size_eval: int = 100
-    eval_every_n_epoch: int = 1  # eval every n Epoch
+    batch_size_eval: int = 128
+    eval_every_n_epoch: int = 5  # eval every n Epoch
     normalize_features: bool = True
 
     # Optimizer
@@ -83,13 +81,13 @@ class Configuration:
     label_smoothing: float = 0.1
 
     # Learning Rate
-    lr: float = 0.005  # 1 * 10^-4 for ViT | 1 * 10^-3 for CNN   0.0002 for adam, 0.05 for sgd (needs to change according to batch size)
+    lr: float = 0.02  # 1 * 10^-4 for ViT | 1 * 10^-3 for CNN   0.0002 for adam, 0.05 for sgd (needs to change according to batch size)
     scheduler: str = "cosine"  # "polynomial" | "cosine" | "constant" | None
     warmup_epochs: int = 1
-    lr_end: float = 0.0001  # only for "polynomial"
+    lr_end: float = 0.00001  # only for "polynomial"
 
     # Dataset
-    data_folder = "D:/Datasets/CVUSA"
+    data_folder = "/datasets/CVUSA"
 
     # Augment Images
     prob_rotate: float = 0.75          # rotates the sat image and ground images simultaneously
@@ -108,7 +106,7 @@ class Configuration:
     num_workers: int = 4
 
     # train on GPU if available
-    device: str = 'cuda' if torch.cuda.is_available() else 'cpu'
+    device: str = 'cuda:3' if torch.cuda.is_available() else 'cpu'
 
     # for better performance
     cudnn_benchmark: bool = True
@@ -133,7 +131,7 @@ if __name__ == '__main__':
 
     if not os.path.exists(model_path):
         os.makedirs(model_path)
-    shutil.copyfile(os.path.basename(__file__), "{}/train.py".format(model_path))
+    shutil.copyfile(os.path.abspath(__file__), "{}/train.py".format(model_path))
 
     # Redirect print to both console and log file
     sys.stdout = Logger(os.path.join(model_path, 'log.txt'))
